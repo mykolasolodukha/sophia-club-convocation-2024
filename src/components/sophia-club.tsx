@@ -1,19 +1,22 @@
-"use client";
+'use client'
 
-import React, {useState} from 'react'
+import React, {Suspense, useState} from 'react'
 import {Button} from "@/components/ui/button"
 import {Input} from "@/components/ui/input"
 import {Textarea} from "@/components/ui/textarea"
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
 import {Label} from "@/components/ui/label"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select"
+import {useToast} from "@/hooks/use-toast"
 import Image from "next/image"
 import Link from "next/link"
 import PocketBase from 'pocketbase';
 
 const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
 
-export default function SophiaClub() {
+function InnerSophiaClub() {
+    const {toast} = useToast();
+
     const [formData, setFormData] = useState({
         first_name: '',
         last_name: '',
@@ -44,29 +47,60 @@ export default function SophiaClub() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault()
+
+        // Validate all required fields
+        const requiredFields = ['first_name', 'last_name', 'phone_number', 'email', 'graduation_city', 'graduation_year', 'payment_option_chosen']
+        const emptyFields = requiredFields.filter(field => !formData[field as keyof typeof formData])
+
+        if (emptyFields.length > 0) {
+            toast({
+                title: "Помилка",
+                description: `Будь ласка, заповніть всі обов'язкові поля: ${emptyFields.join(', ')}`,
+                variant: "destructive",
+            })
+            return
+        }
+
+        if (!paymentScreenshot) {
+            toast({
+                title: "Помилка",
+                description: "Будь ласка, завантаж скріншот підтвердження оплати.",
+                variant: "destructive",
+            })
+            return
+        }
+
+        if (!portraitPhoto) {
+            toast({
+                title: "Помилка",
+                description: "Будь ласка, завантаж портретне фото.",
+                variant: "destructive",
+            })
+            return
+        }
+
         try {
-            const formDataToSubmit = new FormData();
+            const formDataToSubmit = new FormData()
 
             // Append text fields
             Object.entries(formData).forEach(([key, value]) => {
-                formDataToSubmit.append(key, value);
-            });
+                formDataToSubmit.append(key, value)
+            })
 
             // Append files
-            if (paymentScreenshot) {
-                formDataToSubmit.append('payment_screenshot', paymentScreenshot);
-            }
-
-            if (portraitPhoto) {
-                formDataToSubmit.append('portrait_photo', portraitPhoto);
-            }
+            formDataToSubmit.append('payment_screenshot', paymentScreenshot)
+            formDataToSubmit.append('portrait_photo', portraitPhoto)
 
             // Create the record with all data including files
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const createdRecord = await pb.collection('registrations').create(formDataToSubmit);
 
-            alert('Реєстрація успішна!');
+            toast({
+                title: "Успіх!",
+                description: "Реєстрація успішна!",
+            });
+
             // Reset form after successful submission
             setFormData({
                 first_name: '',
@@ -82,7 +116,11 @@ export default function SophiaClub() {
             setPortraitPhoto(null);
         } catch (error) {
             console.error('Error submitting form:', error);
-            alert('Помилка при реєстрації. Будь ласка, спробуйте ще раз.');
+            toast({
+                title: "Помилка",
+                description: "Помилка при реєстрації. Будь ласка, спробуйте ще раз.",
+                variant: "destructive",
+            });
         }
     };
 
@@ -141,7 +179,7 @@ export default function SophiaClub() {
                                         Конвокація Клубу "Софія" 2024
                                     </h1>
                                     <p className="mx-auto max-w-[700px] text-[#E8E3DC] md:text-xl">
-                                        Приєднуйтесь до нас 12 жовтня 2024 року на ВДНГ, павільйон № 4
+                                        Побачимось з тобою 12 жовтня на ВДНГ, павільйон № 4 💚
                                     </p>
                                 </div>
                                 <div className="space-x-4">
@@ -167,8 +205,10 @@ export default function SophiaClub() {
                                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Про
                                     подію</h2>
                                 <p className="mt-4 text-[#35483A]">
-                                    Конвокація Клубу "Софія" - це щорічна подія, яка збирає найкращих мислителів та
-                                    інноваторів. Приєднуйтесь до нас для обміну ідеями, нетворкінгу та натхнення.
+                                    Конвокація - головна щорічна подія Клубу, де відбувається посвята нових членів
+                                    клубу.
+                                    Конвокація 2024 буде проходити під гаслом "Зміна історій" - особисті історії членів
+                                    Клубу перетинаються задля того, щоб творити історію України та творити світ кращим.
                                 </p>
                             </div>
                             <div className="md:w-1/2 mt-6 md:mt-0">
@@ -225,7 +265,13 @@ export default function SophiaClub() {
                                 </div>
                                 <div className="rounded-lg border border-[#E8E3DC] bg-[#35483A] shadow-sm">
                                     <div className="p-6">
-                                        <h3 className="text-xl font-bold">16:30 - 18:30</h3>
+                                        <h3 className="text-xl font-bold">16:30 - 17:30</h3>
+                                        <p className="text-[#E8E3DC]">Аукціон "Від своїх для своїх"</p>
+                                    </div>
+                                </div>
+                                <div className="rounded-lg border border-[#E8E3DC] bg-[#35483A] shadow-sm">
+                                    <div className="p-6">
+                                        <h3 className="text-xl font-bold">17:30 - 18:30</h3>
                                         <p className="text-[#E8E3DC]">Закриття офіційної частини</p>
                                     </div>
                                 </div>
@@ -272,7 +318,7 @@ export default function SophiaClub() {
                                 </CardHeader>
                                 <CardContent>
                                     <form className="space-y-4" onSubmit={handleSubmit}>
-                                        <Select onValueChange={handleSelectChange}
+                                        <Select name="payment_option_chosen" onValueChange={handleSelectChange}
                                                 value={formData.payment_option_chosen}>
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="Твоя вкладка"/>
@@ -290,6 +336,7 @@ export default function SophiaClub() {
                                                 onChange={handleInputChange}
                                                 placeholder="Ім'я"
                                                 className="bg-white text-[#35483A]"
+                                                required
                                             />
                                             <Input
                                                 name="last_name"
@@ -297,6 +344,7 @@ export default function SophiaClub() {
                                                 onChange={handleInputChange}
                                                 placeholder="Прізвище"
                                                 className="bg-white text-[#35483A]"
+                                                required
                                             />
                                         </div>
                                         <Input
@@ -306,6 +354,7 @@ export default function SophiaClub() {
                                             type="tel"
                                             placeholder="Номер телефону"
                                             className="bg-white text-[#35483A]"
+                                            required
                                         />
                                         <Input
                                             name="email"
@@ -314,6 +363,7 @@ export default function SophiaClub() {
                                             type="email"
                                             placeholder="Email"
                                             className="bg-white text-[#35483A]"
+                                            required
                                         />
                                         <Input
                                             name="graduation_city"
@@ -321,6 +371,7 @@ export default function SophiaClub() {
                                             onChange={handleInputChange}
                                             placeholder="Осередок"
                                             className="bg-white text-[#35483A]"
+                                            required
                                         />
                                         <Input
                                             name="graduation_year"
@@ -329,6 +380,7 @@ export default function SophiaClub() {
                                             type="number"
                                             placeholder="Рік випуску"
                                             className="bg-white text-[#35483A]"
+                                            required
                                         />
                                         <Textarea
                                             name="comments"
@@ -339,11 +391,12 @@ export default function SophiaClub() {
                                         <div className="space-y-2">
                                             <Label htmlFor="payment-screenshot"
                                                    className="text-sm font-medium text-[#35483A]">
-                                                Скріншот підтвердження оплати
+                                                Скріншот підтвердження оплати (обов'язково)
                                             </Label>
                                             <div className="flex items-center">
                                                 <Input
                                                     id="payment-screenshot"
+                                                    name="payment_screenshot"
                                                     type="file"
                                                     accept="image/*"
                                                     onChange={(e) => handleFileChange(e, setPaymentScreenshot)}
@@ -368,6 +421,7 @@ export default function SophiaClub() {
                                             <div className="flex items-center">
                                                 <Input
                                                     id="portrait-photo"
+                                                    name="portrait_photo"
                                                     type="file"
                                                     accept="image/*"
                                                     onChange={(e) => handleFileChange(e, setPortraitPhoto)}
@@ -397,18 +451,21 @@ export default function SophiaClub() {
                 <footer
                     className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t border-[#35483A] bg-[#E8E3DC]/90 text-[#35483A]">
                     <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-                        <p className="text-xs">© 2024 Клуб "Софія". Всі права захищені.</p>
-                        <nav className="flex gap-4 sm:gap-6">
-                            <Link className="text-xs hover:text-[#CF922A] transition-colors" href="#">
-                                Політика конфіденційності
-                            </Link>
-                            <Link className="text-xs hover:text-[#CF922A] transition-colors" href="#">
-                                Умови використання
-                            </Link>
-                        </nav>
+                        <p className="text-xs">© 2024 Клуб "Софія". Created with ❤️ by Mykola Solodukha, Vlada Bilyk, Arsen Shumeiko, and Daryna Klushyna.</p>
                     </div>
                 </footer>
             </div>
         </div>
+    )
+}
+
+
+export default function SophiaClub() {
+    return (
+        <>
+            <Suspense fallback={<div>Loading...</div>}>
+                <InnerSophiaClub/>
+            </Suspense>
+        </>
     )
 }
