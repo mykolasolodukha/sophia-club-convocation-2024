@@ -27,6 +27,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="uk" className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
+        <head>
+            <script defer data-domain="sophia-club-convocation-2024.mykolasolodukha.me"
+                    src="https://plausible.mykolasolodukha.me/js/script.js"></script>
+        </head>
         <body className="antialiased">
         <ToastProvider>
             <main>{children}</main>
