@@ -253,25 +253,25 @@ function InnerSophiaClub() {
                                 </div>
                                 <div className="rounded-lg border border-[#E8E3DC] bg-[#35483A] shadow-sm">
                                     <div className="p-6">
-                                        <h3 className="text-xl font-bold">14:00 - 14:45</h3>
+                                        <h3 className="text-xl font-bold">14:00 - 15:30</h3>
+                                        <p className="text-[#E8E3DC]">Нетворкінг-рефлексія</p>
+                                    </div>
+                                </div>
+                                <div className="rounded-lg border border-[#E8E3DC] bg-[#35483A] shadow-sm">
+                                    <div className="p-6">
+                                        <h3 className="text-xl font-bold">15:45 - 16:10</h3>
                                         <p className="text-[#E8E3DC]">Звіт клубу</p>
                                     </div>
                                 </div>
                                 <div className="rounded-lg border border-[#E8E3DC] bg-[#35483A] shadow-sm">
                                     <div className="p-6">
-                                        <h3 className="text-xl font-bold">14:45 - 16:30</h3>
-                                        <p className="text-[#E8E3DC]">Рефлексія-нетворкінг</p>
+                                        <h3 className="text-xl font-bold">16:10 - 17:10</h3>
+                                        <p className="text-[#E8E3DC]">Аукціон</p>
                                     </div>
                                 </div>
                                 <div className="rounded-lg border border-[#E8E3DC] bg-[#35483A] shadow-sm">
                                     <div className="p-6">
-                                        <h3 className="text-xl font-bold">16:30 - 17:30</h3>
-                                        <p className="text-[#E8E3DC]">Аукціон "Від своїх для своїх"</p>
-                                    </div>
-                                </div>
-                                <div className="rounded-lg border border-[#E8E3DC] bg-[#35483A] shadow-sm">
-                                    <div className="p-6">
-                                        <h3 className="text-xl font-bold">17:30 - 18:30</h3>
+                                        <h3 className="text-xl font-bold">17:10 - 18:10</h3>
                                         <p className="text-[#E8E3DC]">Закриття офіційної частини</p>
                                     </div>
                                 </div>
@@ -451,7 +451,8 @@ function InnerSophiaClub() {
                 <footer
                     className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t border-[#35483A] bg-[#E8E3DC]/90 text-[#35483A]">
                     <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-                        <p className="text-xs">© 2024 Клуб "Софія". Created with ❤️ by Mykola Solodukha, Vlada Bilyk, Arsen Shumeiko, and Daryna Klushyna.</p>
+                        <p className="text-xs">© 2024 Клуб "Софія". Created with ❤️ by Mykola Solodukha, Vlada Bilyk,
+                            Arsen Shumeiko, and Daryna Klushyna.</p>
                     </div>
                 </footer>
             </div>
